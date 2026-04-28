@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>4 OOP Pillars — Java Interview Guide</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070b14;--s1:#0d1525;--s2:#111827;--border:#1e2d45;--text:#e2e8f0;--muted:#64748b;--font:'Outfit',sans-serif;--mono:'JetBrains Mono',monospace;
+  --c1:#00d9b8;--c2:#7c6ff7;--c3:#f5a623;--c4:#e07150;
+  --c1bg:rgba(0,217,184,.1);--c2bg:rgba(124,111,247,.1);--c3bg:rgba(245,166,35,.1);--c4bg:rgba(224,113,80,.1);
+  --c1b:rgba(0,217,184,.3);--c2b:rgba(124,111,247,.3);--c3b:rgba(245,166,35,.3);--c4b:rgba(224,113,80,.3)}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);background:var(--bg);color:var(--text);min-height:100vh}
+.header{background:var(--s1);border-bottom:1px solid var(--border);padding:14px 22px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+.logo{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--c2),var(--c1));display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.header-text h1{font-size:15px;font-weight:700}
+.header-text p{font-size:11px;color:var(--muted)}
+.nav{display:flex;gap:6px;padding:16px 22px 0;overflow-x:auto;flex-wrap:wrap}
+.nav-pill{padding:8px 18px;border-radius:20px;border:1px solid var(--border);background:transparent;color:var(--muted);font-family:var(--font);font-size:13px;font-weight:500;cursor:pointer;transition:all .2s;white-space:nowrap;display:flex;align-items:center;gap:7px}
+.nav-pill .num{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700}
+.nav-pill:hover{color:var(--text);border-color:rgba(255,255,255,.2)}
+.nav-pill[data-p="0"].on{background:var(--c1bg);border-color:var(--c1b);color:var(--c1)}
+.nav-pill[data-p="1"].on{background:var(--c2bg);border-color:var(--c2b);color:var(--c2)}
+.nav-pill[data-p="2"].on{background:var(--c3bg);border-color:var(--c3b);color:var(--c3)}
+.nav-pill[data-p="3"].on{background:var(--c4bg);border-color:var(--c4b);color:var(--c4)}
+.nav-pill[data-p="0"] .num{background:var(--c1bg);color:var(--c1)}
+.nav-pill[data-p="1"] .num{background:var(--c2bg);color:var(--c2)}
+.nav-pill[data-p="2"] .num{background:var(--c3bg);color:var(--c3)}
+.nav-pill[data-p="3"] .num{background:var(--c4bg);color:var(--c4)}
+.page{display:none;padding:20px 22px 40px;max-width:900px;margin:0 auto}
+.page.on{display:block}
+.hero{border-radius:14px;padding:22px 24px;margin-bottom:20px;border:1px solid}
+.hero.h0{background:var(--c1bg);border-color:var(--c1b)}
+.hero.h1{background:var(--c2bg);border-color:var(--c2b)}
+.hero.h2{background:var(--c3bg);border-color:var(--c3b)}
+.hero.h3{background:var(--c4bg);border-color:var(--c4b)}
+.hero-top{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.hero-icon{font-size:28px}
+.hero-name{font-size:22px;font-weight:800}
+.h0 .hero-name{color:var(--c1)}.h1 .hero-name{color:var(--c2)}.h2 .hero-name{color:var(--c3)}.h3 .hero-name{color:var(--c4)}
+.hero-def{font-size:14px;color:var(--text);line-height:1.7;margin-bottom:12px}
+.hero-1liner{font-size:13px;color:var(--muted);font-style:italic;border-left:3px solid;padding-left:12px}
+.h0 .hero-1liner{border-color:var(--c1)}.h1 .hero-1liner{border-color:var(--c2)}.h2 .hero-1liner{border-color:var(--c3)}.h3 .hero-1liner{border-color:var(--c4)}
+.kp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px;margin-bottom:20px}
+.kp{background:var(--s1);border:1px solid var(--border);border-radius:10px;padding:12px 14px}
+.kp-head{font-size:12px;font-weight:700;margin-bottom:4px}
+.kp-body{font-size:12px;color:var(--muted);line-height:1.6}
+code{font-family:var(--mono);font-size:11.5px;color:var(--c1);background:var(--s1);padding:1px 5px;border-radius:4px}
+.stitle{font-size:14px;font-weight:600;margin-bottom:10px;margin-top:4px}
+.cblock{background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:16px;margin-bottom:18px;overflow-x:auto}
+pre{font-family:var(--mono);font-size:12.5px;line-height:1.75;white-space:pre;color:#adb9cc}
+.kw{color:#c792ea}.cm{color:#4a5568;font-style:italic}.an{color:#ffcb6b}.cn{color:#82aaff}
+.st{color:#c3e88d}.nr{color:#00d9b8}.me{color:#89ddf8}.tp{color:#f5a623}
+.vf{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+@media(max-width:640px){.vf{grid-template-columns:1fr}}
+.vlabel{font-size:11px;font-weight:600;padding:4px 9px;border-radius:5px;margin-bottom:6px;display:inline-block}
+.bad{background:rgba(239,68,68,.12);color:#ef4444}
+.good{background:rgba(34,197,94,.12);color:#22c55e}
+.code-pair{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+@media(max-width:640px){.code-pair{grid-template-columns:1fr}}
+.clabel{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.6px;margin-bottom:6px;display:flex;align-items:center;gap:7px}
+.clabel span{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+.tip{background:var(--s1);border:1px solid var(--border);border-radius:8px;padding:11px 14px;font-size:12.5px;color:var(--muted);line-height:1.7;margin-bottom:18px}
+.tip.t0{border-left:3px solid var(--c1)}.tip.t1{border-left:3px solid var(--c2)}.tip.t2{border-left:3px solid var(--c3)}.tip.t3{border-left:3px solid var(--c4)}
+.tip strong{color:var(--text)}
+.qa-wrap{margin-top:24px}
+.qa-title{font-size:13px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:10px;display:flex;align-items:center;gap:7px}
+.qa-title::before{content:'';display:block;width:3px;height:14px;border-radius:2px;background:var(--muted)}
+.qarow{border-bottom:1px solid var(--border)}
+.qarow:last-child{border-bottom:none}
+.qatrig{width:100%;padding:12px 0;background:none;border:none;display:flex;justify-content:space-between;align-items:flex-start;cursor:pointer;font-size:13.5px;font-weight:500;color:var(--text);text-align:left;gap:10px;font-family:var(--font);line-height:1.4}
+.qatrig:hover{color:var(--c1)}
+.qaans{display:none;font-size:13px;color:var(--muted);padding:0 0 14px;line-height:1.8}
+.qaans strong{color:var(--text)}
+.qaopen .qaans{display:block}
+.qaopen .chev{transform:rotate(180deg)}
+.chev{transition:transform .2s;font-size:11px;flex-shrink:0;color:var(--muted);margin-top:3px}
+</style>
+</head>
+<body>
+<div class="header">
+  <div class="logo">☕</div>
+  <div class="header-text">
+    <h1>4 OOP Pillars — Java Interview Guide</h1>
+    <p>Code examples · Interview Q&amp;A · Violation traps · One-liners to memorize</p>
+  </div>
+</div>
+<div class="nav">
+  <button class="nav-pill on" data-p="0" onclick="go(0)"><span class="num">1</span>Encapsulation</button>
+  <button class="nav-pill" data-p="1" onclick="go(1)"><span class="num">2</span>Inheritance</button>
+  <button class="nav-pill" data-p="2" onclick="go(2)"><span class="num">3</span>Polymorphism</button>
+  <button class="nav-pill" data-p="3" onclick="go(3)"><span class="num">4</span>Abstraction</button>
+</div>
+
+<!-- PAGE 0: ENCAPSULATION -->
+<div class="page on" id="p0">
+  <div class="hero h0">
+    <div class="hero-top"><div class="hero-icon">🔒</div><div class="hero-name">Encapsulation</div></div>
+    <div class="hero-def">Bundling data (fields) and the methods that operate on that data into a single unit (class), and <strong>restricting direct access</strong> to internal state. External code interacts only through a well-defined public interface.</div>
+    <div class="hero-1liner">"Hide the data, expose the behaviour. The class is the only guardian of its own state."</div>
+  </div>
+  <div class="kp-grid">
+    <div class="kp"><div class="kp-head" style="color:var(--c1)">Private fields</div><div class="kp-body">All fields are <code>private</code>. State is never directly accessible from outside.</div></div>
+    <div class="kp"><div class="kp-head" style="color:var(--c1)">Controlled access</div><div class="kp-body">Getters/setters (or better: behaviour methods) enforce validation and business rules.</div></div>
+    <div class="kp"><div class="kp-head" style="color:var(--c1)">Immutability</div><div class="kp-body">No setters at all = strong encapsulation. State set once at construction time.</div></div>
+    <div class="kp"><div class="kp-head" style="color:var(--c1)">Tell, Don't Ask</div><div class="kp-body">Ask the object to <em>do</em> something; don't ask for its data and decide yourself.</div></div>
+  </div>
+  <div class="stitle">Violation vs Correct</div>
+  <div class="vf">
+    <div>
+      <div class="vlabel bad">❌ Broken encapsulation</div>
+      <div class="cblock"><pre><span class="kw">class</span> <span class="cn">BankAccount</span> {
+    <span class="kw">public</span> <span class="tp">double</span> balance; <span class="cm">// public field!</span>
+    <span class="kw">public</span> <span class="cn">String</span> owner;
+}
+
+<span class="cm">// Caller can do ANYTHING — no rules:</span>
+account.balance = <span class="nr">-9999</span>;   <span class="cm">// no validation</span>
+account.balance += <span class="nr">1000</span>;   <span class="cm">// logic scattered</span>
+account.owner = <span class="kw">null</span>;       <span class="cm">// corrupt state</span></pre></div>
+    </div>
+    <div>
+      <div class="vlabel good">✅ Proper encapsulation</div>
+      <div class="cblock"><pre><span class="kw">class</span> <span class="cn">BankAccount</span> {
+    <span class="kw">private final</span> <span class="cn">String</span> owner;
+    <span class="kw">private</span> <span class="tp">double</span> balance;
+
+    <span class="kw">public</span> <span class="cn">BankAccount</span>(<span class="cn">String</span> owner, <span class="tp">double</span> initial) {
+        <span class="kw">if</span> (initial &lt; <span class="nr">0</span>) <span class="kw">throw new</span> <span class="cn">IllegalArgumentException</span>();
+        <span class="kw">this</span>.owner   = <span class="cn">Objects</span>.<span class="me">requireNonNull</span>(owner);
+        <span class="kw">this</span>.balance = initial;
+    }
+
+    <span class="kw">public void</span> <span class="me">deposit</span>(<span class="tp">double</span> amount) {
+        <span class="kw">if</span> (amount &lt;= <span class="nr">0</span>) <span class="kw">throw new</span> <span class="cn">IllegalArgumentException</span>();
+        balance += amount;
+    }
+
+    <span class="kw">public void</span> <span class="me">withdraw</span>(<span class="tp">double</span> amount) {
+        <span class="kw">if</span> (amount &gt; balance) <span class="kw">throw new</span> <span class="cn">InsufficientFundsException</span>();
+        balance -= amount;
+    }
+
+    <span class="kw">public double</span> <span class="me">getBalance</span>() { <span class="kw">return</span> balance; }
+}</pre></div>
+    </div>
+  </div>
+  <div class="stitle">Strongest encapsulation — Java record (immutable)</div>
+  <div class="cblock"><pre><span class="cm">// Java 16+ record — all fields private final, no setters ever</span>
+<span class="kw">record</span> <span class="cn">Money</span>(<span class="cn">BigDecimal</span> amount, <span class="cn">Currency</span> currency) {
+
+    <span class="cm">// Compact constructor: enforce invariants at creation time</span>
+    <span class="cn">Money</span> {
+        <span class="cn">Objects</span>.<span class="me">requireNonNull</span>(amount,   <span class="st">"amount required"</span>);
+        <span class="cn">Objects</span>.<span class="me">requireNonNull</span>(currency, <span class="st">"currency required"</span>);
+        <span class="kw">if</span> (amount.compareTo(<span class="cn">BigDecimal</span>.ZERO) &lt; <span class="nr">0</span>)
+            <span class="kw">throw new</span> <span class="cn">IllegalArgumentException</span>(<span class="st">"amount cannot be negative"</span>);
+    }
+
+    <span class="cm">// Behaviour method — returns new instance (object never mutates)</span>
+    <span class="kw">public</span> <span class="cn">Money</span> <span class="me">add</span>(<span class="cn">Money</span> other) {
+        <span class="kw">if</span> (!currency.equals(other.currency))
+            <span class="kw">throw new</span> <span class="cn">CurrencyMismatchException</span>();
+        <span class="kw">return new</span> <span class="cn">Money</span>(amount.add(other.amount), currency);
+    }
+}</pre></div>
+  <div class="tip t0"><strong>Interview trap:</strong> "Isn't encapsulation just getters and setters?" — No. A class with public setters for every field has no real encapsulation. The goal is enforcing <strong>invariants</strong>. Prefer behaviour methods (<code>deposit()</code>, <code>withdraw()</code>) over naked getters/setters. Mention the <strong>Tell, Don't Ask</strong> principle.</div>
+  <div class="qa-wrap">
+    <div class="qa-title">Interview Q&amp;A</div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>What is encapsulation? How is it different from data hiding?</span><span class="chev">▼</span></button>
+      <div class="qaans">Encapsulation is about <strong>bundling</strong> data and the methods that operate on it into a class and exposing only what's necessary through a controlled interface. Data hiding is one <em>mechanism</em> — using <code>private</code> access modifiers. Together they ensure: (1) objects maintain valid state at all times, (2) implementation can change without breaking callers, (3) business rules live in one place rather than scattered across the codebase.</div>
+    </div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>Can you have encapsulation without getters and setters?</span><span class="chev">▼</span></button>
+      <div class="qaans">Yes — and it's often <em>better</em> without them. The ideal is <strong>behaviour methods</strong>: <code>account.deposit(100)</code> instead of <code>account.setBalance(account.getBalance() + 100)</code>. A class that exposes a setter for every field has no real encapsulation — anyone can bypass invariants. Immutable classes (using <code>record</code>, <code>final</code> fields, no setters) represent the strongest form of encapsulation.</div>
+    </div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>What is the Tell, Don't Ask principle?</span><span class="chev">▼</span></button>
+      <div class="qaans"><strong>Tell</strong> an object what to do; <strong>don't Ask</strong> for its data and then decide yourself. Bad: <code>if (account.getBalance() >= amount) account.setBalance(...)</code>. Good: <code>account.withdraw(amount)</code> — the account enforces its own rule. This keeps logic co-located with data and prevents duplication of business rules across callers.</div>
+    </div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>How does encapsulation support maintenance and testing?</span><span class="chev">▼</span></button>
+      <div class="qaans"><strong>Maintenance:</strong> implementation details (switching from <code>ArrayList</code> to <code>LinkedList</code> internally) don't affect callers — only the public interface matters. <strong>Testing:</strong> you test through behaviour methods, not internal state. You test that <code>account.withdraw()</code> throws when overdrawn — you don't assert on the raw <code>balance</code> field. State changes are an implementation detail.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 1: INHERITANCE -->
+<div class="page" id="p1">
+  <div class="hero h1">
+    <div class="hero-top"><div class="hero-icon">🧬</div><div class="hero-name">Inheritance</div></div>
+    <div class="hero-def">A mechanism allowing a subclass to acquire the properties and behaviours of a superclass, enabling <strong>code reuse</strong> and establishing an <strong>IS-A relationship</strong> between types.</div>
+    <div class="hero-1liner">"A Dog IS-A Animal. Use inheritance when the IS-A relationship is genuinely true and stable."</div>
+  </div>
+  <div class="kp-grid">
+    <div class="kp"><div class="kp-head" style="color:var(--c2)">extends</div><div class="kp-body">Single inheritance only. Java avoids the diamond problem this way.</div></div>
+    <div class="kp"><div class="kp-head" style="color:var(--c2)">super keyword</div><div class="kp-body">Call parent constructor or parent method from the subclass.</div></div>
+    <div class="kp"><div class="kp-head" style="color:var(--c2)">@Override</div><div class="kp-body">Redefine parent behaviour in child. Compile-time safety net.</div></div>
+    <div class="kp"><div class="kp-head" style="color:var(--c2)">IS-A test</div><div class="kp-body">Before inheriting, ask: "is a Dog always an Animal in every context?" If yes, inherit.</div></div>
+  </div>
+  <div class="stitle">Core hierarchy example</div>
+  <div class="cblock"><pre><span class="kw">abstract class</span> <span class="cn">Animal</span> {
+    <span class="kw">private final</span> <span class="cn">String</span> name;
+    <span class="kw">private final</span> <span class="tp">int</span>    age;
+
+    <span class="kw">public</span> <span class="cn">Animal</span>(<span class="cn">String</span> name, <span class="tp">int</span> age) {
+        <span class="kw">this</span>.name = name;
+        <span class="kw">this</span>.age  = age;
+    }
+
+    <span class="kw">public</span> <span class="cn">String</span> <span class="me">getName</span>() { <span class="kw">return</span> name; }
+    <span class="kw">public</span> <span class="tp">int</span>    <span class="me">getAge</span>()  { <span class="kw">return</span> age;  }
+
+    <span class="cm">// Concrete method — shared by all animals</span>
+    <span class="kw">public void</span> <span class="me">eat</span>() { <span class="cn">System</span>.out.println(name + <span class="st">" is eating"</span>); }
+
+    <span class="cm">// Abstract — every subclass MUST provide its own version</span>
+    <span class="kw">public abstract void</span> <span class="me">makeSound</span>();
+
+    <span class="kw">public</span> <span class="cn">String</span> <span class="me">describe</span>() { <span class="kw">return</span> <span class="st">"I am "</span> + name + <span class="st">", aged "</span> + age; }
+}
+
+<span class="cm">// Dog IS-A Animal ✓</span>
+<span class="kw">class</span> <span class="cn">Dog</span> <span class="kw">extends</span> <span class="cn">Animal</span> {
+    <span class="kw">private final</span> <span class="cn">String</span> breed;
+
+    <span class="kw">public</span> <span class="cn">Dog</span>(<span class="cn">String</span> name, <span class="tp">int</span> age, <span class="cn">String</span> breed) {
+        <span class="kw">super</span>(name, age);   <span class="cm">// parent constructor must run first</span>
+        <span class="kw">this</span>.breed = breed;
+    }
+
+    <span class="an">@Override</span>
+    <span class="kw">public void</span> <span class="me">makeSound</span>() { <span class="cn">System</span>.out.println(getName() + <span class="st">": Woof!"</span>); }
+
+    <span class="an">@Override</span>
+    <span class="kw">public</span> <span class="cn">String</span> <span class="me">describe</span>() {
+        <span class="kw">return super</span>.<span class="me">describe</span>() + <span class="st">", breed: "</span> + breed; <span class="cm">// extends parent</span>
+    }
+
+    <span class="kw">public void</span> <span class="me">fetch</span>() { <span class="cn">System</span>.out.println(<span class="st">"Fetching!"</span>); } <span class="cm">// Dog-specific</span>
+}
+
+<span class="kw">class</span> <span class="cn">Cat</span> <span class="kw">extends</span> <span class="cn">Animal</span> {
+    <span class="kw">public</span> <span class="cn">Cat</span>(<span class="cn">String</span> name, <span class="tp">int</span> age) { <span class="kw">super</span>(name, age); }
+
+    <span class="an">@Override</span>
+    <span class="kw">public void</span> <span class="me">makeSound</span>() { <span class="cn">System</span>.out.println(getName() + <span class="st">": Meow!"</span>); }
+}</pre></div>
+  <div class="stitle">Real-world context: Exception hierarchy + Spring</div>
+  <div class="cblock"><pre><span class="cm">// Exception hierarchy — inheritance used exactly right</span>
+<span class="kw">class</span> <span class="cn">AppException</span>        <span class="kw">extends</span> <span class="cn">RuntimeException</span>   { ... }
+<span class="kw">class</span> <span class="cn">NotFoundException</span>   <span class="kw">extends</span> <span class="cn">AppException</span>     { ... }
+<span class="kw">class</span> <span class="cn">OrderNotFoundException</span> <span class="kw">extends</span> <span class="cn">NotFoundException</span> { ... }
+
+<span class="cm">// Spring: ResponseEntityExceptionHandler uses inheritance</span>
+<span class="an">@RestControllerAdvice</span>
+<span class="kw">public class</span> <span class="cn">GlobalExceptionHandler</span> <span class="kw">extends</span> <span class="cn">ResponseEntityExceptionHandler</span> {
+
+    <span class="an">@ExceptionHandler</span>(<span class="cn">OrderNotFoundException</span>.<span class="kw">class</span>)
+    <span class="kw">public</span> <span class="cn">ResponseEntity</span>&lt;<span class="cn">ErrorResponse</span>&gt; <span class="me">handleOrderNotFound</span>(<span class="cn">OrderNotFoundException</span> ex) {
+        <span class="kw">return</span> <span class="cn">ResponseEntity</span>.status(<span class="cn">HttpStatus</span>.NOT_FOUND)
+                             .body(<span class="kw">new</span> <span class="cn">ErrorResponse</span>(ex.getMessage()));
+    }
+    <span class="cm">// 15+ handlers inherited: handleMethodArgumentNotValid, etc.</span>
+}</pre></div>
+  <div class="stitle">The famous mistake — Inheritance vs Composition</div>
+  <div class="vf">
+    <div>
+      <div class="vlabel bad">❌ Wrong: Stack extends Vector</div>
+      <div class="cblock"><pre><span class="cm">// Real JDK mistake — java.util.Stack</span>
+<span class="cm">// Stack IS-NOT-A Vector in behaviour.</span>
+<span class="cm">// Vector.add(0, element) bypasses LIFO.</span>
+<span class="kw">class</span> <span class="cn">Stack</span>&lt;T&gt; <span class="kw">extends</span> <span class="cn">Vector</span>&lt;T&gt; {
+    <span class="cm">// inherits 40+ irrelevant methods</span>
+    <span class="cm">// caller can insert at any index!</span>
+    <span class="cm">// breaks the Stack contract</span>
+}</pre></div>
+    </div>
+    <div>
+      <div class="vlabel good">✅ Right: Composition (HAS-A)</div>
+      <div class="cblock"><pre><span class="cm">// Stack HAS-A Deque internally</span>
+<span class="kw">class</span> <span class="cn">Stack</span>&lt;T&gt; {
+    <span class="kw">private final</span> <span class="cn">Deque</span>&lt;T&gt; storage = <span class="kw">new</span> <span class="cn">ArrayDeque</span>&lt;&gt;();
+
+    <span class="kw">public void</span> <span class="me">push</span>(T item) { storage.<span class="me">push</span>(item); }
+    <span class="kw">public</span>    T <span class="me">pop</span>()        { <span class="kw">return</span> storage.<span class="me">pop</span>(); }
+    <span class="kw">public</span>    T <span class="me">peek</span>()       { <span class="kw">return</span> storage.<span class="me">peek</span>(); }
+    <span class="cm">// Only 3 methods exposed. Contract respected.</span>
+}</pre></div>
+    </div>
+  </div>
+  <div class="tip t1"><strong>Interview gold:</strong> Always mention "Favour Composition Over Inheritance" (Effective Java, Item 18). Inheritance creates <strong>tight coupling</strong> — child breaks when parent changes. The classic gotcha: <code>java.util.Stack extends Vector</code> — a design mistake in the JDK itself. Use inheritance only when the IS-A relationship is genuinely stable and the subclass truly substitutes for the parent everywhere.</div>
+  <div class="qa-wrap">
+    <div class="qa-title">Interview Q&amp;A</div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>Why doesn't Java support multiple inheritance of classes?</span><span class="chev">▼</span></button>
+      <div class="qaans">The <strong>diamond problem</strong>: if class C extends both A and B, and both define <code>method()</code>, which does C inherit? Ambiguity. Java resolves this by allowing only single-class inheritance. Multiple <em>interface</em> implementation is allowed. With Java 8 default methods a diamond can appear — the class must explicitly override the conflicting method and can call a specific parent's version via <code>Interface1.super.method()</code>.</div>
+    </div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>Difference between method overriding and method hiding?</span><span class="chev">▼</span></button>
+      <div class="qaans"><strong>Overriding</strong> (instance methods): resolved at <em>runtime</em> based on actual object type — this is runtime polymorphism. <code>@Override</code> is your compile-time safety net.<br><br><strong>Hiding</strong> (static methods): resolved at <em>compile time</em> based on reference type. If parent and child both declare the same static method and you call it via a parent reference, the parent version runs — even if the object is a child. Static methods are NOT polymorphic.</div>
+    </div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>Can a constructor be inherited? What about private methods?</span><span class="chev">▼</span></button>
+      <div class="qaans"><strong>Constructors</strong> are NOT inherited. The child must define its own and use <code>super()</code> to call the parent's. If you omit <code>super()</code>, Java calls the no-arg parent constructor implicitly — if none exists, compilation fails.<br><br><strong>Private methods</strong> are NOT inherited — they belong only to the declaring class and are invisible to subclasses. Declaring the same signature in a subclass creates an independent new method, not an override.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 2: POLYMORPHISM -->
+<div class="page" id="p2">
+  <div class="hero h2">
+    <div class="hero-top"><div class="hero-icon">🎭</div><div class="hero-name">Polymorphism</div></div>
+    <div class="hero-def">The ability of an object to take <strong>many forms</strong>. The same method call behaves differently based on the actual object type. Two flavours: <strong>compile-time</strong> (overloading) and <strong>runtime</strong> (overriding via dynamic dispatch).</div>
+    <div class="hero-1liner">"One interface, many implementations. The caller doesn't need to know which one runs."</div>
+  </div>
+  <div class="kp-grid">
+    <div class="kp"><div class="kp-head" style="color:var(--c3)">Compile-time</div><div class="kp-body">Method <strong>overloading</strong> — same name, different signatures. Resolved by compiler.</div></div>
+    <div class="kp"><div class="kp-head" style="color:var(--c3)">Runtime</div><div class="kp-body">Method <strong>overriding</strong> — subclass redefines parent method. JVM picks via vtable at runtime.</div></div>
+    <div class="kp"><div class="kp-head" style="color:var(--c3)">Dynamic dispatch</div><div class="kp-body">JVM resolves the call based on the actual object type, not the reference type.</div></div>
+    <div class="kp"><div class="kp-head" style="color:var(--c3)">Liskov (LSP)</div><div class="kp-body">Subtype must be substitutable for its supertype without breaking correctness.</div></div>
+  </div>
+  <div class="stitle">Part 1 — Runtime Polymorphism (most important for interviews)</div>
+  <div class="cblock"><pre><span class="kw">interface</span> <span class="cn">Shape</span> {
+    <span class="tp">double</span> <span class="me">area</span>();
+    <span class="tp">double</span> <span class="me">perimeter</span>();
+    <span class="kw">default void</span> <span class="me">describe</span>() {
+        <span class="cn">System</span>.out.printf(<span class="st">"Area=%.2f, Perimeter=%.2f%n"</span>, <span class="me">area</span>(), <span class="me">perimeter</span>());
+    }
+}
+
+<span class="kw">class</span> <span class="cn">Circle</span> <span class="kw">implements</span> <span class="cn">Shape</span> {
+    <span class="kw">private final double</span> radius;
+    <span class="kw">public</span> <span class="cn">Circle</span>(<span class="tp">double</span> r) { radius = r; }
+    <span class="an">@Override</span> <span class="kw">public double</span> <span class="me">area</span>()      { <span class="kw">return</span> <span class="cn">Math</span>.PI * radius * radius; }
+    <span class="an">@Override</span> <span class="kw">public double</span> <span class="me">perimeter</span>() { <span class="kw">return</span> <span class="nr">2</span> * <span class="cn">Math</span>.PI * radius; }
+}
+
+<span class="kw">class</span> <span class="cn">Rectangle</span> <span class="kw">implements</span> <span class="cn">Shape</span> {
+    <span class="kw">private final double</span> width, height;
+    <span class="kw">public</span> <span class="cn">Rectangle</span>(<span class="tp">double</span> w, <span class="tp">double</span> h) { width = w; height = h; }
+    <span class="an">@Override</span> <span class="kw">public double</span> <span class="me">area</span>()      { <span class="kw">return</span> width * height; }
+    <span class="an">@Override</span> <span class="kw">public double</span> <span class="me">perimeter</span>() { <span class="kw">return</span> <span class="nr">2</span> * (width + height); }
+}
+
+<span class="cm">// ── RUNTIME POLYMORPHISM — same call, different execution ──</span>
+<span class="cn">List</span>&lt;<span class="cn">Shape</span>&gt; shapes = <span class="cn">List</span>.of(
+    <span class="kw">new</span> <span class="cn">Circle</span>(<span class="nr">5</span>), <span class="kw">new</span> <span class="cn">Rectangle</span>(<span class="nr">4</span>, <span class="nr">6</span>), <span class="kw">new</span> <span class="cn">Triangle</span>(...)
+);
+
+shapes.<span class="me">forEach</span>(<span class="cn">Shape</span>::describe);      <span class="cm">// JVM picks correct area() at runtime</span>
+
+<span class="tp">double</span> totalArea = shapes.stream()
+    .<span class="me">mapToDouble</span>(<span class="cn">Shape</span>::area)           <span class="cm">// no instanceof, no casting — clean!</span>
+    .<span class="me">sum</span>();</pre></div>
+  <div class="stitle">Part 2 — Compile-time Polymorphism (overloading)</div>
+  <div class="cblock"><pre><span class="kw">class</span> <span class="cn">Printer</span> {
+    <span class="cm">// Same name — different parameter types = overloading</span>
+    <span class="kw">public void</span> <span class="me">print</span>(<span class="cn">String</span> s)             { <span class="cn">System</span>.out.println(<span class="st">"String: "</span> + s); }
+    <span class="kw">public void</span> <span class="me">print</span>(<span class="tp">int</span> n)                { <span class="cn">System</span>.out.println(<span class="st">"Int: "</span>    + n); }
+    <span class="kw">public void</span> <span class="me">print</span>(<span class="tp">double</span> d)             { <span class="cn">System</span>.out.println(<span class="st">"Double: "</span> + d); }
+    <span class="kw">public void</span> <span class="me">print</span>(<span class="cn">String</span> s, <span class="tp">int</span> copies) { <span class="cm">/* ... */</span> }
+}
+
+<span class="cn">Printer</span> p = <span class="kw">new</span> <span class="cn">Printer</span>();
+p.<span class="me">print</span>(<span class="st">"hello"</span>);  <span class="cm">// compiler picks print(String)  at compile time</span>
+p.<span class="me">print</span>(<span class="nr">42</span>);      <span class="cm">// compiler picks print(int)     at compile time</span>
+p.<span class="me">print</span>(<span class="nr">3.14</span>);   <span class="cm">// compiler picks print(double)  at compile time</span>
+
+<span class="cm">// JDK example: System.out.println is overloaded 10 times</span></pre></div>
+  <div class="stitle">Spring Boot daily usage — polymorphism in action</div>
+  <div class="cblock"><pre><span class="kw">interface</span> <span class="cn">PaymentGateway</span> {
+    <span class="cn">PaymentResult</span> <span class="me">charge</span>(<span class="cn">Amount</span> amount, <span class="cn">Card</span> card);
+}
+
+<span class="an">@Component</span>(<span class="st">"stripe"</span>)    <span class="kw">class</span> <span class="cn">StripeGateway</span>   <span class="kw">implements</span> <span class="cn">PaymentGateway</span> { <span class="cm">/* ... */</span> }
+<span class="an">@Component</span>(<span class="st">"braintree"</span>) <span class="kw">class</span> <span class="cn">BraintreeGateway</span> <span class="kw">implements</span> <span class="cn">PaymentGateway</span> { <span class="cm">/* ... */</span> }
+<span class="an">@Component</span>(<span class="st">"mock"</span>)      <span class="kw">class</span> <span class="cn">MockGateway</span>      <span class="kw">implements</span> <span class="cn">PaymentGateway</span> { <span class="cm">/* tests */</span> }
+
+<span class="an">@Service</span>
+<span class="kw">class</span> <span class="cn">PaymentService</span> {
+    <span class="kw">private final</span> <span class="cn">PaymentGateway</span> gateway;
+
+    <span class="kw">public</span> <span class="cn">PaymentService</span>(<span class="an">@Qualifier</span>(<span class="st">"stripe"</span>) <span class="cn">PaymentGateway</span> gateway) {
+        <span class="kw">this</span>.gateway = gateway;
+    }
+
+    <span class="kw">public</span> <span class="cn">PaymentResult</span> <span class="me">processPayment</span>(<span class="cn">Amount</span> a, <span class="cn">Card</span> c) {
+        <span class="kw">return</span> gateway.<span class="me">charge</span>(a, c);  <span class="cm">// polymorphic — swap gateway without touching this class</span>
+    }
+}</pre></div>
+  <div class="tip t2"><strong>Key distinction:</strong> Overloading = compile-time, resolved by <em>parameter types</em>. Overriding = runtime, resolved by <em>actual object type</em>. Interviewers love: "Can you override a static method?" — No, static methods are hidden not overridden. Also know <strong>covariant return types</strong>: overriding method can return a subtype of the parent's declared return type (since Java 5).</div>
+  <div class="qa-wrap">
+    <div class="qa-title">Interview Q&amp;A</div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>What is dynamic dispatch and how does the JVM implement it?</span><span class="chev">▼</span></button>
+      <div class="qaans">Dynamic dispatch is the runtime selection of method implementation based on actual object type. The JVM uses a <strong>vtable</strong> (virtual method table) — a per-class array of method pointers. When you call <code>shape.area()</code>, the JVM looks up <code>area</code> in the vtable of the <em>actual</em> object (e.g., <code>Circle</code>), not the declared reference type (<code>Shape</code>). The JIT compiler optimises this with inline caching, so the overhead is negligible in practice.</div>
+    </div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>Can you override a static method? What about a private method?</span><span class="chev">▼</span></button>
+      <div class="qaans"><strong>Static methods</strong> cannot be overridden — only <em>hidden</em>. Resolution happens at compile time based on reference type. <code>@Override</code> on a static method won't compile.<br><br><strong>Private methods</strong> cannot be overridden either — they're not visible to subclasses. The same signature in a subclass is a brand-new independent method. No runtime dispatch happens.</div>
+    </div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>What is the Liskov Substitution Principle and why does it matter?</span><span class="chev">▼</span></button>
+      <div class="qaans">LSP: if S is a subtype of T, objects of type T may be replaced with S without breaking correctness. Polymorphism only works correctly when LSP holds. Classic violation: <code>Square extends Rectangle</code> — setting width on a Square must also change height, breaking the Rectangle caller's assumption that dimensions are independent. Fix: use a common <code>Shape</code> interface. If your subclass needs to throw exceptions or weaken preconditions, it's an LSP violation.</div>
+    </div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>How does polymorphism enable the Open/Closed Principle?</span><span class="chev">▼</span></button>
+      <div class="qaans">OCP: open for extension, closed for modification. Without polymorphism: <code>if (shape instanceof Circle) ... else if (shape instanceof Rectangle) ...</code> — every new shape requires modifying existing code. With polymorphism: define a <code>Shape</code> interface with <code>area()</code>, and adding a <code>Pentagon</code> requires zero changes to existing code. Callers using the <code>Shape</code> abstraction get the new behaviour for free.</div>
+    </div>
+  </div>
+</div>
+
+<!-- PAGE 3: ABSTRACTION -->
+<div class="page" id="p3">
+  <div class="hero h3">
+    <div class="hero-top"><div class="hero-icon">🎨</div><div class="hero-name">Abstraction</div></div>
+    <div class="hero-def">Hiding <strong>implementation complexity</strong> and exposing only what is relevant to the caller. Define <em>what</em> something does — not <em>how</em> it does it. Achieved through <strong>interfaces</strong> and <strong>abstract classes</strong>.</div>
+    <div class="hero-1liner">"A driver uses the steering wheel without knowing the steering rack mechanics. That's abstraction."</div>
+  </div>
+  <div class="kp-grid">
+    <div class="kp"><div class="kp-head" style="color:var(--c4)">Interface</div><div class="kp-body">Pure contract — <em>what</em> to do. Any unrelated class can implement it. Multiple allowed.</div></div>
+    <div class="kp"><div class="kp-head" style="color:var(--c4)">Abstract class</div><div class="kp-body">Partial implementation — <em>what</em> + some <em>how</em>. Forces subclasses to fill the gaps.</div></div>
+    <div class="kp"><div class="kp-head" style="color:var(--c4)">Reduce coupling</div><div class="kp-body">Callers depend on the abstraction, not the concrete type — easy to swap implementations.</div></div>
+    <div class="kp"><div class="kp-head" style="color:var(--c4)">vs Encapsulation</div><div class="kp-body">Encapsulation hides internal <em>state</em>. Abstraction hides implementation <em>complexity</em>.</div></div>
+  </div>
+  <div class="stitle">Interface vs Abstract Class — the decisive comparison</div>
+  <div class="code-pair">
+    <div>
+      <div class="clabel"><span style="background:var(--c4)"></span>interface — pure contract</div>
+      <div class="cblock"><pre><span class="kw">interface</span> <span class="cn">Notification</span> {
+    <span class="cm">// All methods implicitly public abstract</span>
+    <span class="tp">void</span> <span class="me">send</span>(<span class="cn">String</span> message, <span class="cn">String</span> recipient);
+
+    <span class="cm">// Default method (Java 8+) — optional override</span>
+    <span class="kw">default void</span> <span class="me">sendWithRetry</span>(<span class="cn">String</span> msg, <span class="cn">String</span> to) {
+        <span class="kw">for</span> (<span class="tp">int</span> i = <span class="nr">0</span>; i &lt; <span class="nr">3</span>; i++) {
+            <span class="kw">try</span> { <span class="me">send</span>(msg, to); <span class="kw">return</span>; }
+            <span class="kw">catch</span> (<span class="cn">Exception</span> e) { <span class="cm">/* retry */</span> }
+        }
+    }
+
+    <span class="cm">// Any unrelated class can implement:</span>
+}
+
+<span class="kw">class</span> <span class="cn">EmailNotification</span> <span class="kw">implements</span> <span class="cn">Notification</span> { <span class="cm">/* SMTP */</span>   }
+<span class="kw">class</span> <span class="cn">SmsNotification</span>   <span class="kw">implements</span> <span class="cn">Notification</span> { <span class="cm">/* Twilio */</span> }
+<span class="kw">class</span> <span class="cn">SlackNotification</span> <span class="kw">implements</span> <span class="cn">Notification</span> { <span class="cm">/* Webhook */</span>}
+<span class="kw">class</span> <span class="cn">PushNotification</span>  <span class="kw">implements</span> <span class="cn">Notification</span> { <span class="cm">/* FCM */</span>    }</pre></div>
+    </div>
+    <div>
+      <div class="clabel"><span style="background:var(--c2)"></span>abstract class — template method</div>
+      <div class="cblock"><pre><span class="kw">abstract class</span> <span class="cn">BaseNotification</span> {
+    <span class="cm">// Shared state — interfaces can't have fields</span>
+    <span class="kw">private final</span> <span class="cn">String</span>    senderName;
+    <span class="kw">private final</span> <span class="cn">RateLimit</span> rateLimiter;
+
+    <span class="kw">protected</span> <span class="cn">BaseNotification</span>(<span class="cn">String</span> sender) {
+        <span class="kw">this</span>.senderName  = sender;
+        <span class="kw">this</span>.rateLimiter = <span class="kw">new</span> <span class="cn">RateLimit</span>(<span class="nr">100</span>);
+    }
+
+    <span class="cm">// Template Method — skeleton fixed here</span>
+    <span class="kw">public final void</span> <span class="me">send</span>(<span class="cn">String</span> msg, <span class="cn">String</span> to) {
+        rateLimiter.<span class="me">checkLimit</span>();         <span class="cm">// shared</span>
+        <span class="cn">String</span> formatted = <span class="me">format</span>(msg);  <span class="cm">// shared</span>
+        <span class="me">doSend</span>(formatted, to);            <span class="cm">// ← abstract hook</span>
+    }
+
+    <span class="kw">protected abstract void</span> <span class="me">doSend</span>(<span class="cn">String</span> msg, <span class="cn">String</span> to);
+
+    <span class="kw">private</span> <span class="cn">String</span> <span class="me">format</span>(<span class="cn">String</span> msg) {
+        <span class="kw">return</span> <span class="st">"["</span> + senderName + <span class="st">"] "</span> + msg;
+    }
+}
+
+<span class="kw">class</span> <span class="cn">SmtpNotification</span> <span class="kw">extends</span> <span class="cn">BaseNotification</span> {
+    <span class="an">@Override</span>
+    <span class="kw">protected void</span> <span class="me">doSend</span>(<span class="cn">String</span> msg, <span class="cn">String</span> email) {
+        smtpClient.<span class="me">send</span>(email, msg); <span class="cm">// SMTP-only details</span>
+    }
+}</pre></div>
+    </div>
+  </div>
+  <div class="stitle">Abstraction vs Encapsulation — the most confused pair</div>
+  <div class="cblock"><pre><span class="cm">// ABSTRACTION = hiding COMPLEXITY (what, not how)  ← design level</span>
+<span class="cm">// ENCAPSULATION = hiding INTERNAL STATE (data)     ← implementation level</span>
+
+<span class="kw">interface</span> <span class="cn">EmailService</span> {
+    <span class="tp">void</span> <span class="me">sendEmail</span>(<span class="cn">String</span> to, <span class="cn">String</span> subject, <span class="cn">String</span> body);
+    <span class="cm">// ↑ ABSTRACTION: caller has no idea if this is SMTP, SES, SendGrid, or a mock</span>
+}
+
+<span class="kw">class</span> <span class="cn">SmtpEmailService</span> <span class="kw">implements</span> <span class="cn">EmailService</span> {
+    <span class="kw">private final</span> <span class="cn">SmtpClient</span> client;   <span class="cm">// ← ENCAPSULATION: hidden field</span>
+    <span class="kw">private</span> <span class="tp">int</span> sentCount = <span class="nr">0</span>;         <span class="cm">// ← ENCAPSULATION: hidden state</span>
+
+    <span class="an">@Override</span>
+    <span class="kw">public void</span> <span class="me">sendEmail</span>(<span class="cn">String</span> to, <span class="cn">String</span> sub, <span class="cn">String</span> body) {
+        client.<span class="me">connect</span>();              <span class="cm">// ← ABSTRACTION: all SMTP complexity hidden</span>
+        client.<span class="me">authenticate</span>();
+        client.<span class="me">send</span>(to, sub, body);
+        client.<span class="me">disconnect</span>();
+        sentCount++;                    <span class="cm">// ← ENCAPSULATION: state change internal</span>
+    }
+}
+
+<span class="cm">// Caller sees NEITHER the implementation detail (abstraction)</span>
+<span class="cm">// NOR the SmtpClient or counter (encapsulation)</span>
+<span class="cn">EmailService</span> email = <span class="kw">new</span> <span class="cn">SmtpEmailService</span>(client);
+email.<span class="me">sendEmail</span>(<span class="st">"bob@co.com"</span>, <span class="st">"Hi"</span>, <span class="st">"Hello!"</span>);</pre></div>
+  <div class="stitle">When to choose — definitive rule</div>
+  <div class="cblock"><pre><span class="cm">// ── Use INTERFACE when ────────────────────────────────────</span>
+<span class="cm">// • Unrelated classes need the same capability</span>
+<span class="cm">// • Multiple "inheritance" needed (class can implement many)</span>
+<span class="cm">// • Pure contract with no shared state</span>
+<span class="cm">// • Building a plugin/extension point</span>
+<span class="cm">// JDK: Comparable, Runnable, Iterable, Serializable</span>
+
+<span class="cm">// ── Use ABSTRACT CLASS when ───────────────────────────────</span>
+<span class="cm">// • Shared instance FIELDS across a family</span>
+<span class="cm">// • Template Method Pattern (skeleton + variant steps)</span>
+<span class="cm">// • All subclasses are the same IS-A family</span>
+<span class="cm">// JDK: AbstractList, HttpServlet, AbstractQueuedSynchronizer</span>
+
+<span class="cm">// ── Best practice: both together ─────────────────────────</span>
+<span class="kw">interface</span> <span class="cn">Repository</span>&lt;T, ID&gt; { <span class="cm">/* public contract */</span> }
+
+<span class="kw">abstract class</span> <span class="cn">AbstractRepository</span>&lt;T, ID&gt; <span class="kw">implements</span> <span class="cn">Repository</span>&lt;T, ID&gt; {
+    <span class="cm">// shared: caching, auditing, pagination logic</span>
+}
+
+<span class="kw">class</span> <span class="cn">OrderRepository</span> <span class="kw">extends</span> <span class="cn">AbstractRepository</span>&lt;<span class="cn">Order</span>, <span class="cn">UUID</span>&gt; {
+    <span class="cm">// only order-specific queries here</span>
+}</pre></div>
+  <div class="tip t3"><strong>One-liner that impresses:</strong> "Abstraction operates at the <em>design level</em> — what interface do I expose? Encapsulation operates at the <em>implementation level</em> — how do I protect my internal state?" Example: <code>List</code> is the abstraction (callers don't care if it's ArrayList or LinkedList), and <code>ArrayList</code>'s private <code>Object[] elementData</code> is encapsulation.</div>
+  <div class="qa-wrap">
+    <div class="qa-title">Interview Q&amp;A</div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>What is the difference between an abstract class and an interface?</span><span class="chev">▼</span></button>
+      <div class="qaans"><strong>Interface:</strong> pure contract — no instance fields (only static final constants), all methods public. A class can implement many. Use when unrelated classes need the same capability. From Java 8+: <code>default</code> and <code>static</code> methods allowed. From Java 9+: <code>private</code> methods for internal reuse.<br><br><strong>Abstract class:</strong> partial implementation — can have instance fields, constructors, <code>protected</code> methods. A class can extend only one. Use for the Template Method Pattern or when you need to share state and code across a tightly related family.<br><br><strong>Rule:</strong> prefer interfaces for flexibility. Use abstract classes when you genuinely need shared state or behaviour across a family.</div>
+    </div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>Can an abstract class have a constructor? Can you instantiate it?</span><span class="chev">▼</span></button>
+      <div class="qaans">Yes, abstract classes can and should have constructors — called via <code>super()</code> from the subclass constructor, essential for initialising shared fields.<br><br>No, you cannot directly instantiate an abstract class — <code>new AbstractAnimal()</code> is a compile error. You instantiate a concrete subclass, and the chain of <code>super()</code> calls runs the abstract class constructor up the hierarchy.</div>
+    </div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>How did Java 8 default methods change interfaces?</span><span class="chev">▼</span></button>
+      <div class="qaans">Before Java 8, adding a method to an interface broke all existing implementors — a massive backwards-compatibility problem. Default methods allow interfaces to evolve without breaking existing code. Example: <code>Collection.stream()</code> was added as a default in Java 8 — <code>ArrayList</code>, <code>HashSet</code>, etc. got it for free.<br><br><strong>Diamond with defaults:</strong> if a class implements two interfaces with conflicting defaults, it must explicitly override and can delegate via <code>Interface1.super.method()</code>.</div>
+    </div>
+    <div class="qarow">
+      <button class="qatrig" onclick="this.closest('.qarow').classList.toggle('qaopen')"><span>What is the Template Method Pattern?</span><span class="chev">▼</span></button>
+      <div class="qaans">Defines the <strong>skeleton of an algorithm</strong> in an abstract class — invariant steps are implemented, variant steps are left abstract for subclasses. The calling method is typically <code>final</code> so subclasses can't break the skeleton. Heavy JDK usage: <code>HttpServlet.service()</code> calls <code>doGet()</code>/<code>doPost()</code>. Spring's <code>JdbcTemplate</code> handles connection lifecycle while you supply just the query via a callback. Abstract class + Template Method + hook methods is one of the most powerful patterns for reusable frameworks.</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(n) {
+  document.querySelectorAll('.page').forEach((p, i) => p.classList.toggle('on', i === n));
+  document.querySelectorAll('.nav-pill').forEach(b => b.classList.toggle('on', +b.dataset.p === n));
+  window.scrollTo({top: 0, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>
